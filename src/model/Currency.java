@@ -30,7 +30,7 @@ public class Currency implements Serializable {
         pcs.firePropertyChange("Currency", null, amount);
     }
     synchronized void setAmount(double amount){
-
+        this.amount = amount;
     }
 
     public double getAmount() {
