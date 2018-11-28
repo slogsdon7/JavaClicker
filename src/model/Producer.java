@@ -4,6 +4,9 @@ package model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * Use {@link Game#getManualProducer()} and {@link Game#getProducers()} to obtain instances of these for the current game
+ */
 public class Producer {
     private double base_production = 1;
     private double scaling_factor = 1.0;
@@ -12,7 +15,7 @@ public class Producer {
     private String name;
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
-    public Producer(){
+     Producer(){
 
     }
 
