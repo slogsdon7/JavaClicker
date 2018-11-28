@@ -29,7 +29,9 @@ public class Currency implements Serializable {
         this.amount += amount;
         pcs.firePropertyChange("Currency", null, amount);
     }
+    synchronized void setAmount(double amount){
 
+    }
 
     public double getAmount() {
         return amount;
@@ -38,6 +40,15 @@ public class Currency implements Serializable {
 
     public String getName(){
         return name;
+    }
+
+    boolean purchase(Producer producer){
+       double cost = producer.getCost();
+       if (amount>cost){
+           setAmount(cost);
+           return true;
+       }
+       return false;
     }
 
     @Override

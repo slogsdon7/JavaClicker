@@ -8,7 +8,10 @@ import java.beans.PropertyChangeSupport;
  * Use {@link Game#getManualProducer()} and {@link Game#getProducers()} to obtain instances of these for the current game
  */
 public class Producer {
+    Currency currency;
     private double base_production = 1;
+    private double costBase = 5;
+    private double costFactor = 1.1;
     private double scaling_factor = 1.0;
     private int count = 1;
     private boolean automatic = false;
@@ -27,8 +30,14 @@ public class Producer {
         pcs.firePropertyChange("produced", null, getProductionAmount());
     }
 
-    public boolean isAutomatic(){
-        return automatic;
+    public boolean tryPurchase() {
+        return currency.purchase(this);
+    }
+
+    public boolean isAutomatic(){ return automatic; }
+
+    public double getCost(){
+        return costBase * costFactor * count;
     }
 
     /**
@@ -37,6 +46,7 @@ public class Producer {
     public double getProductionAmount(){
         return base_production * scaling_factor * count;
     }
+
     double getBase_production() {
         return base_production;
     }
