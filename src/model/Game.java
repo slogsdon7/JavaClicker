@@ -11,7 +11,7 @@ public class Game implements Serializable {
     private List<Producer> producers;
     private Producer manualProducer;
     private List<Upgrade> upgrades;
-    private Thread thread;
+    private transient Thread thread;
 
     public Game(){
         currency = new Currency();
@@ -44,8 +44,9 @@ public class Game implements Serializable {
     }
 
     private void tick(){
-
+        System.out.println(currency.getAmount());
     }
+
     private void runLoop() {
         thread = new Thread(() ->
         {

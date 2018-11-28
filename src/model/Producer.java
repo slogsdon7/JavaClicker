@@ -19,20 +19,29 @@ public class Producer {
 
     }
 
+    /**
+     * Does production. Fires property change event with amount produced.
+     * ActionListeners should call this for manual producers. Automatic producers will call this themselves.
+     */
     public void produce(){
-        double produced = base_production * scaling_factor * count;
-        pcs.firePropertyChange("produced", null, produced);
+        pcs.firePropertyChange("produced", null, getProductionAmount());
     }
 
     public boolean isAutomatic(){
         return automatic;
     }
 
-    public double getBase_production() {
+    /**
+     * @return Amount of currency produced by this producer
+     */
+    public double getProductionAmount(){
+        return base_production * scaling_factor * count;
+    }
+    double getBase_production() {
         return base_production;
     }
 
-    public double getScaling_factor() {
+    double getScaling_factor() {
         return scaling_factor;
     }
 
