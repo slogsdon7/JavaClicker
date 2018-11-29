@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
 /**
+ * Contains logic related to game currency.
  * Use {@link Game#getCurrency()} to obtain an instance of this Class.
  * Fires PropertyChangeEvent whenever the currency amount changes.
  */
@@ -21,13 +22,15 @@ public class Currency implements Serializable {
         amount = amt;
     }
 
+
+
     public void addPropertyChangeListener(PropertyChangeListener listener){
         pcs.addPropertyChangeListener(listener);
     }
 
-    public synchronized void addAmount(double amount) {
+    synchronized void addAmount(double amount) {
         this.amount += amount;
-        pcs.firePropertyChange("Currency", null, amount);
+        pcs.firePropertyChange("Currency", null, this);
     }
     synchronized void setAmount(double amount){
         this.amount = amount;
@@ -42,17 +45,25 @@ public class Currency implements Serializable {
         return name;
     }
 
-    boolean purchase(Producer producer){
+    synchronized boolean purchase(Producer producer){
        double cost = producer.getCost();
-       if (amount>cost){
-           setAmount(cost);
+       if (canAfford(cost)){
+           setAmount(amount - cost);
            return true;
        }
        return false;
     }
 
+    synchronized boolean purchase(Upgrade upgrade){
+       return false;
+    }
+
+    boolean canAfford(double cost){
+       return amount > cost;
+    }
+
     @Override
     public String toString() {
-        return Double.toString(amount) + " Objects";
+        return Double.toString(amount) + " Instances";
     }
 }

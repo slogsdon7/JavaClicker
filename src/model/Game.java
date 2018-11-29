@@ -2,11 +2,15 @@ package model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Timer;
 
+
+
+/**
+ *  Runs game loop and provides game objects.
+ */
 public class Game implements Serializable {
     private transient boolean running = false;
-    protected Currency currency;
+    static volatile Currency currency;
     private int interval = 500;
     private List<Producer> producers;
     private Producer manualProducer;
@@ -44,7 +48,7 @@ public class Game implements Serializable {
     }
 
     private void tick(){
-        System.out.println(currency.getAmount());
+        //System.out.println(currency.getAmount());
     }
 
     private void runLoop() {
