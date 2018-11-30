@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,7 +13,7 @@ public class Game implements Serializable {
     private transient boolean running = false;
     static volatile Currency currency;
     private int interval = 500;
-    private List<Producer> producers;
+    private List<Producer> autoProducers;
     private Producer manualProducer;
     private List<Upgrade> upgrades;
     private transient Thread thread;
@@ -21,6 +22,8 @@ public class Game implements Serializable {
         currency = new Currency();
         manualProducer = new Producer();
         manualProducer.setName("Button");
+        autoProducers = ProducerFactory.getAutoProducers();
+
     }
 
     public Currency getCurrency() {
@@ -35,8 +38,8 @@ public class Game implements Serializable {
         return interval;
     }
 
-    public List<Producer> getProducers() {
-        return producers;
+    public List<Producer> getAutoProducers() {
+        return autoProducers;
     }
 
     public Producer getManualProducer() {
@@ -48,7 +51,7 @@ public class Game implements Serializable {
     }
 
     private void tick(){
-        //System.out.println(currency.getAmount());
+        autoProducers.forEach(Producer::produce);
     }
 
     private void runLoop() {
@@ -98,4 +101,27 @@ public class Game implements Serializable {
     }
 
 
+}
+
+
+class ProducerFactory {
+
+    static List<Producer> getAutoProducers() {
+        List<Producer> producers = new ArrayList<>();
+        for (int i = 1; i < 6; i++) {
+            //double baseProduction, double costBase, double costFactor, double scalingFactor, int level, boolean automatic, String name
+            Producer producer = new Producer(
+                    Math.round(1.0 * ((i * i) * 10)),
+                    Math.max(100, 100.0 * ((i - 1) * 10)),
+                    1.15,
+                    1.1,
+                    0,
+                    true,
+                    "Tier " + (i)
+            );
+            producers.add(producer);
+        }
+        return producers;
+
+    }
 }

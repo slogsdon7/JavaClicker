@@ -29,7 +29,7 @@ public class Currency implements Serializable {
     }
 
     synchronized void addAmount(double amount) {
-        this.amount += amount;
+        this.amount += Math.round(amount);
         pcs.firePropertyChange("Currency", null, this);
     }
     synchronized void setAmount(double amount){
@@ -64,6 +64,6 @@ public class Currency implements Serializable {
 
     @Override
     public String toString() {
-        return Double.toString(amount) + " Instances";
+        return String.format("%d Instances", Math.round(amount));
     }
 }
