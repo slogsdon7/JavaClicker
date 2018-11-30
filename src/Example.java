@@ -47,12 +47,7 @@ public class Example {
                 //System.out.printf("currencyChange: {\n\tpropertyName: %s,\n\tnewValue: %s}\n", evt.getPropertyName(), evt.getNewValue());
             }
         };
-        PropertyChangeListener producerListener = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
 
-            }
-        };
         game.getCurrency().addPropertyChangeListener(currencyListener);
         game.getManualProducer().addPropertyChangeListener(new PropertyChangeListener() {
             @Override
@@ -60,11 +55,11 @@ public class Example {
                 EventQueue.invokeLater(new Runnable() {
                     public void run() {
                         if (evt.getPropertyName().equals("level"))
-                            table.setValueAt("Level " + evt.getNewValue().toString() + game.getManualProducer().getName(), 1, 0);
+                            table.setValueAt("Level " + evt.getNewValue().toString() + " " + game.getManualProducer().getName(), 1, 0);
                         if (evt.getPropertyName().equals("cost"))
-                            table.setValueAt(evt.getNewValue(), 1, 1);
+                            table.setValueAt(String.format("%.0f", (Double) evt.getNewValue()), 1, 1);
                         if (evt.getPropertyName().equals("lastProduced"))
-                            table.setValueAt(evt.getNewValue(), 1, 2);
+                            table.setValueAt(String.format("+%.0f", (Double) evt.getNewValue()), 1, 2);
 
                     }
                 });
@@ -87,9 +82,9 @@ public class Example {
                             if (evt.getPropertyName().equals("level"))
                                 table.setValueAt("Level " + evt.getNewValue() + " " + producer.getName(), j, 0);
                             if (evt.getPropertyName().equals("cost"))
-                                table.setValueAt(evt.getNewValue(), j, 1);
+                                table.setValueAt(String.format("%.0f", (Double) evt.getNewValue()), j, 1);
                             if (evt.getPropertyName().equals("lastProduced"))
-                                table.setValueAt(evt.getNewValue(), j, 2);
+                                table.setValueAt(String.format("+%.0f", (Double) evt.getNewValue()), j, 2);
                         }
                     });
 

@@ -46,7 +46,7 @@ public class Currency implements Serializable {
     }
 
     synchronized boolean purchase(Producer producer){
-        double cost = producer.getCostBase();
+        double cost = producer.getCost();
        if (canAfford(cost)){
            setAmount(amount - cost);
            return true;

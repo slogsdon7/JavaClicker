@@ -10,7 +10,7 @@ import java.util.List;
  *  Runs game loop and provides game objects.
  */
 public class Game implements Serializable {
-    private transient boolean running = false;
+    private static transient boolean running = false;
     static volatile Currency currency;
     private int interval = 500;
     private List<Producer> autoProducers;
@@ -30,7 +30,7 @@ public class Game implements Serializable {
         return currency;
     }
 
-    public boolean isRunning() {
+    public static boolean isRunning() {
         return running;
     }
 

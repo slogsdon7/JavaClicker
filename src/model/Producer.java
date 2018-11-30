@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import static model.Game.currency;
+import static model.Game.isRunning;
 
 /**
  * Produces currency.
@@ -15,7 +16,7 @@ public class Producer implements Runnable {
     private double costBase = 5;
     private double costFactor = 1.15;
     private double scalingFactor = 1.0;
-    private double lastProduced;
+    private volatile double lastProduced;
     private int interval;
     private int level = 1;
     private boolean automatic = false;
@@ -35,6 +36,7 @@ public class Producer implements Runnable {
         this.level = level;
         this.automatic = automatic;
         this.name = name;
+        this.interval = interval;
     }
 
     /**
@@ -43,8 +45,10 @@ public class Producer implements Runnable {
      */
     public void produce() {
         lastProduced = getProductionAmount();
-        currency.addAmount(lastProduced);
-        pcs.firePropertyChange("lastProduced", null, "+" + lastProduced);
+        if (lastProduced > 0) {
+            currency.addAmount(lastProduced);
+            pcs.firePropertyChange("lastProduced", null, lastProduced);
+        }
     }
 
     /**
@@ -61,17 +65,16 @@ public class Producer implements Runnable {
 
     private void doPurchase() {
         level++;
-        costBase = getCostBase();
         pcs.firePropertyChange("level", null, level);
-        pcs.firePropertyChange("costBase", null, costBase);
+        pcs.firePropertyChange("cost", null, getCost());
     }
 
     boolean isAutomatic() {
         return automatic;
     }
 
-    public double getCostBase() {
-        return costBase * Math.pow(costBase, costFactor);
+    public double getCost() {
+        return costBase * Math.pow(costFactor, level);
     }
 
     /**
@@ -110,16 +113,19 @@ public class Producer implements Runnable {
     }
     @Override
     public String toString() {
-        return String.format("%s - Level: %d Cost: %e", name, level, getCostBase());
+        return String.format("%s - Level: %d Cost: %e", name, level, getCost());
     }
 
     @Override
     public void run() {
-        produce();
-        try {
-            Thread.sleep(interval);
-        } catch (InterruptedException e) {
+        while (isRunning()) {
+            produce();
+            System.out.println(name + " interval = " + interval);
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
 
+            }
         }
     }
 }
