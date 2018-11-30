@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Example {
     static Game game;
     JFrame frame = new JFrame("Example");
-    static JTable table = new JTable(10, 3);
+    JTable table = new JTable(10, 4);
      Example(){
         game = new Game();
     }
@@ -23,7 +23,6 @@ public class Example {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(new JPanel());
         Container pane = frame.getContentPane();
-        //pane.setLayout(new GridLayout(0,3));
         table.setShowGrid(true);
         table.setPreferredSize(new Dimension(500, 500));
         pane.add(table);
@@ -33,14 +32,15 @@ public class Example {
 
     }
 
-    static void setupListeners() {
+    void setupListeners() {
         PropertyChangeListener currencyListener = new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
+                System.out.println("currencyEvt = [" + evt + "]");
                 EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        table.setValueAt(evt.getNewValue(), 0, 1);
+                        table.setValueAt(evt.getNewValue(), 0, 0);
                     }
                 });
 
@@ -60,7 +60,7 @@ public class Example {
                 EventQueue.invokeLater(new Runnable() {
                     public void run() {
                         if (evt.getPropertyName().equals("level"))
-                            table.setValueAt(evt.getNewValue(), 1, 0);
+                            table.setValueAt("Level " + evt.getNewValue().toString() + game.getManualProducer().getName(), 1, 0);
                         if (evt.getPropertyName().equals("cost"))
                             table.setValueAt(evt.getNewValue(), 1, 1);
                         if (evt.getPropertyName().equals("lastProduced"))
@@ -75,17 +75,17 @@ public class Example {
 
         AtomicInteger i = new AtomicInteger(1);
         for (Producer producer : game.getAutoProducers()) {
-            int j = i.incrementAndGet();
 
             producer.addPropertyChangeListener(new PropertyChangeListener() {
-
+                int j = i.incrementAndGet();
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
+                    System.out.println("evt = [" + evt + "]");
                     EventQueue.invokeLater(new Runnable() {
                         @Override
                         public void run() {
                             if (evt.getPropertyName().equals("level"))
-                                table.setValueAt(evt.getNewValue(), j, 0);
+                                table.setValueAt("Level " + evt.getNewValue() + " " + producer.getName(), j, 0);
                             if (evt.getPropertyName().equals("cost"))
                                 table.setValueAt(evt.getNewValue(), j, 1);
                             if (evt.getPropertyName().equals("lastProduced"))
