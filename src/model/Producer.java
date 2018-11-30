@@ -10,12 +10,13 @@ import static model.Game.currency;
  * Produces currency.
  * Use {@link Game#getManualProducer()} and {@link Game#getAutoProducers()} to obtain instances of these for the current game
  */
-public class Producer {
+public class Producer implements Runnable {
     private double baseProduction = 10;
     private double costBase = 5;
-    private double costFactor = 1.1;
+    private double costFactor = 1.15;
     private double scalingFactor = 1.0;
     private double lastProduced;
+    private int interval;
     private int level = 1;
     private boolean automatic = false;
     private String name;
@@ -26,7 +27,7 @@ public class Producer {
 
     }
 
-    Producer(double baseProduction, double costBase, double costFactor, double scalingFactor, int level, boolean automatic, String name) {
+    Producer(double baseProduction, double costBase, double costFactor, double scalingFactor, int level, boolean automatic, String name, int interval) {
         this.baseProduction = baseProduction;
         this.costBase = costBase;
         this.costFactor = costFactor;
@@ -44,14 +45,13 @@ public class Producer {
         lastProduced = getProductionAmount();
         currency.addAmount(lastProduced);
         pcs.firePropertyChange("lastProduced", null, "+" + lastProduced);
-
     }
 
     /**
-     * @return true if the cost is less than the amount of currency, false if it is not.
-     * Fires PropertyChangeEvents for both level and cost on success.
+     * @return true if the costBase is less than the amount of currency, false if it is not.
+     * Fires PropertyChangeEvents for both level and costBase on success.
      */
-    public boolean tryPurchase() {
+    public synchronized boolean tryPurchase() {
         if (currency.purchase(this)) {
             doPurchase();
             return true;
@@ -61,23 +61,24 @@ public class Producer {
 
     private void doPurchase() {
         level++;
+        costBase = getCostBase();
         pcs.firePropertyChange("level", null, level);
-        pcs.firePropertyChange("cost", null, getCost());
+        pcs.firePropertyChange("costBase", null, costBase);
     }
 
     boolean isAutomatic() {
         return automatic;
     }
 
-    public double getCost() {
-        return Math.round(costBase * costFactor * (level + 1));
+    public double getCostBase() {
+        return costBase * Math.pow(costBase, costFactor);
     }
 
     /**
      * @return Amount of currency produced by this producer
      */
     double getProductionAmount() {
-        return Math.round(baseProduction * scalingFactor * level);
+        return baseProduction * scalingFactor * level;
     }
 
     double getBaseProduction() {
@@ -104,9 +105,22 @@ public class Producer {
         pcs.addPropertyChangeListener(listener);
     }
 
+    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(propertyName, listener);
+    }
     @Override
     public String toString() {
-        return String.format("%s - Level: %d Cost: %e", name, level, getCost());
+        return String.format("%s - Level: %d Cost: %e", name, level, getCostBase());
+    }
+
+    @Override
+    public void run() {
+        produce();
+        try {
+            Thread.sleep(interval);
+        } catch (InterruptedException e) {
+
+        }
     }
 }
 

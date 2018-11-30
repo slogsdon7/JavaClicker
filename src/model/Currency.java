@@ -46,7 +46,7 @@ public class Currency implements Serializable {
     }
 
     synchronized boolean purchase(Producer producer){
-       double cost = producer.getCost();
+        double cost = producer.getCostBase();
        if (canAfford(cost)){
            setAmount(amount - cost);
            return true;
@@ -64,6 +64,6 @@ public class Currency implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%d Instances", Math.round(amount));
+        return String.format("%.2f Instances", amount);
     }
 }

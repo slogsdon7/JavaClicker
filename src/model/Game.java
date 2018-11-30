@@ -51,10 +51,11 @@ public class Game implements Serializable {
     }
 
     private void tick(){
-        autoProducers.forEach(Producer::produce);
+        // autoProducers.forEach(Producer::produce);
     }
 
     private void runLoop() {
+        getAutoProducers().forEach(producer -> new Thread(producer).start());
         thread = new Thread(() ->
         {
             while (running) {
@@ -68,7 +69,7 @@ public class Game implements Serializable {
             }
 
         });
-        thread.start();
+        //thread.start();
     }
 
     /**
@@ -107,20 +108,60 @@ public class Game implements Serializable {
 class ProducerFactory {
 
     static List<Producer> getAutoProducers() {
+        String[] names = {
+                "Hapless Intern",
+                "Functional Programmer",
+                "Joey Subclass",
+                "",
+                "",
+                ""
+        };
         List<Producer> producers = new ArrayList<>();
-        for (int i = 1; i < 6; i++) {
-            //double baseProduction, double costBase, double costFactor, double scalingFactor, int level, boolean automatic, String name
-            Producer producer = new Producer(
-                    Math.round(1.0 * ((i * i) * 10)),
-                    Math.max(100, 100.0 * ((i - 1) * 10)),
+
+        producers.add(new Producer(
+                .5,
+                100.0,
                     1.15,
                     1.1,
                     0,
                     true,
-                    "Tier " + (i)
-            );
-            producers.add(producer);
-        }
+                "Hapless Intern",
+                500
+        ));
+
+        producers.add(new Producer(
+                4,
+                500.0,
+                1.15,
+                1.1,
+                0,
+                true,
+                "Functional Programmer",
+                2000));
+
+        producers.add(new Producer(
+                10,
+                3000.0,
+                1.15,
+                1.1,
+                0,
+                true,
+                " ",
+                10 * 1000));
+
+        producers.add(new Producer(
+                40,
+                10000.0,
+                1.15,
+                1.1,
+                0,
+                true,
+                "Joey Subclass",
+                100 * 1000)
+        );
+
+
+
         return producers;
 
     }
