@@ -30,10 +30,12 @@ public class Currency implements Serializable {
 
     synchronized void addAmount(double amount) {
         this.amount += Math.round(amount);
-        pcs.firePropertyChange("Currency", null, amount);
+        pcs.firePropertyChange("amount", null, this.amount);
     }
-    synchronized void setAmount(double amount){
-        this.amount = amount;
+
+    synchronized void subtractAmount(double amount) {
+        this.amount -= amount;
+        pcs.firePropertyChange("amount", null, this.amount);
     }
 
     public double getAmount() {
@@ -48,7 +50,7 @@ public class Currency implements Serializable {
     synchronized boolean purchase(Producer producer){
         double cost = producer.getCost();
        if (canAfford(cost)){
-           setAmount(amount - cost);
+           subtractAmount(cost);
            return true;
        }
        return false;
