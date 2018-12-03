@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Fires PropertyChangeEvent whenever the currency amount changes.
  */
 public class Currency implements Serializable {
-    private String name = "Objects";
+    private String name = "Garbage";
     private double amount;
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 

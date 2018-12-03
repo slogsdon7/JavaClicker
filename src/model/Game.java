@@ -21,7 +21,7 @@ public class Game implements Serializable {
     public Game(){
         currency = new Currency();
         manualProducer = new Producer();
-        manualProducer.setName("Button");
+        manualProducer.setName("Garbage can");
         autoProducers = ProducerFactory.getAutoProducers();
 
     }
@@ -111,10 +111,10 @@ class ProducerFactory {
 
     static List<Producer> getAutoProducers() {
         String[] names = {
-                "Hapless Intern",
-                "Functional Programmer",
-                "Joey Subclass",
-                "",
+                "Garbage man",
+                "Garbage truck",
+                "Dumpster truck",
+                "Garbage dump",
                 "",
                 ""
         };
@@ -127,7 +127,7 @@ class ProducerFactory {
                     1.1,
                     0,
                     true,
-                "Hapless Intern",
+                "Garbage can",
                 500
         ));
 
@@ -138,7 +138,7 @@ class ProducerFactory {
                 1.1,
                 0,
                 true,
-                "Functional Programmer",
+                "Garbage man",
                 2000));
 
         producers.add(new Producer(
@@ -148,7 +148,7 @@ class ProducerFactory {
                 1.1,
                 0,
                 true,
-                " ",
+                "Garbage truck",
                 10 * 1000));
 
         producers.add(new Producer(
@@ -158,7 +158,7 @@ class ProducerFactory {
                 1.1,
                 0,
                 true,
-                "Joey Subclass",
+                "Garbage dump",
                 100 * 1000)
         );
 
