@@ -89,7 +89,9 @@ public class Game implements Serializable {
         running = false;
     }
 
-    public void save(){}
+    public void save() {
+        DB.save(this);
+    }
 
     //Will reset the database
     public void hardReset(){

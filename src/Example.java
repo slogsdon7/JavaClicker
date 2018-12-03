@@ -19,6 +19,9 @@ public class Example {
         game = new Game();
     }
 
+    /**
+     * For demonstration purposes.
+     */
     void createView() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(new JPanel());
@@ -124,6 +127,3 @@ public class Example {
 
 }
 
-class ExView {
-
-}

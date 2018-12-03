@@ -77,6 +77,9 @@ public class Producer implements Runnable {
         return costBase * Math.pow(costFactor, level);
     }
 
+    public boolean canPurchase() {
+        return false;
+    }
     /**
      * @return Amount of currency produced by this producer
      */
@@ -120,7 +123,7 @@ public class Producer implements Runnable {
     public void run() {
         while (isRunning()) {
             produce();
-            System.out.println(name + " interval = " + interval);
+            //System.out.println(name + " interval = " + interval);
             try {
                 Thread.sleep(interval);
             } catch (InterruptedException e) {

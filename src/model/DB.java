@@ -39,4 +39,10 @@ public class DB {
         }
         return null;
     }
+
+    static void save(Game game) {
+
+    }
+
 }
+
