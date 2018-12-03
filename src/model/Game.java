@@ -16,14 +16,25 @@ public class Game implements Serializable {
     private List<Producer> autoProducers;
     private Producer manualProducer;
     private List<Upgrade> upgrades;
+    private String description;
     private transient Thread thread;
 
     public Game(){
         currency = new Currency();
         manualProducer = new Producer();
-        manualProducer.setName("Garbage can");
+        manualProducer.setName("Cookie");
         autoProducers = ProducerFactory.getAutoProducers();
 
+    }
+
+    public static List<Game> getSaves() {
+        ArrayList<Game> games = new ArrayList<>();
+        return games;
+    }
+
+    public static Game newGame() {
+        Game game = new Game();
+        return game;
     }
 
     public Currency getCurrency() {
@@ -103,7 +114,10 @@ public class Game implements Serializable {
 
     }
 
-
+    @Override
+    public String toString() {
+        return description;
+    }
 }
 
 
@@ -111,9 +125,9 @@ class ProducerFactory {
 
     static List<Producer> getAutoProducers() {
         String[] names = {
-                "Garbage man",
-                "Garbage truck",
-                "Dumpster truck",
+                "Grandma",
+                "Bakery",
+                "Factory",
                 "Garbage dump",
                 "",
                 ""
@@ -127,7 +141,7 @@ class ProducerFactory {
                     1.1,
                     0,
                     true,
-                "Garbage can",
+                "Cookie",
                 500
         ));
 
@@ -138,7 +152,7 @@ class ProducerFactory {
                 1.1,
                 0,
                 true,
-                "Garbage man",
+                "Grandma",
                 2000));
 
         producers.add(new Producer(
@@ -148,7 +162,7 @@ class ProducerFactory {
                 1.1,
                 0,
                 true,
-                "Garbage truck",
+                "Bakery",
                 10 * 1000));
 
         producers.add(new Producer(
@@ -158,7 +172,7 @@ class ProducerFactory {
                 1.1,
                 0,
                 true,
-                "Garbage dump",
+                "Factory",
                 100 * 1000)
         );
 

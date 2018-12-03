@@ -66,6 +66,6 @@ public class Currency implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%.2f Instances", amount);
+        return String.format("%.2f Cookies", amount);
     }
 }
