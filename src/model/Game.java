@@ -13,6 +13,17 @@ public class Game implements Serializable {
     private static transient boolean running = false;
     static volatile Currency currency;
     private int interval = 500;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private String name;
     private List<Producer> autoProducers;
     private Producer manualProducer;
     private List<Upgrade> upgrades;
@@ -24,16 +35,23 @@ public class Game implements Serializable {
         manualProducer = new Producer();
         manualProducer.setName("Cookie");
         autoProducers = ProducerFactory.getAutoProducers();
+        name = "Savegame";
 
     }
 
-    public static List<Game> getSaves() {
-        ArrayList<Game> games = new ArrayList<>();
-        return games;
+    public String getName() {
+        return name;
     }
 
-    public static Game newGame() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public static Game create(String name) {
         Game game = new Game();
+        game.setName(name);
+        DB.insert(game);
         return game;
     }
 
@@ -100,17 +118,34 @@ public class Game implements Serializable {
         running = false;
     }
 
+    public void delete() {
+
+    }
     public void save() {
-        DB.save(this);
+        DB.update(this);
     }
 
-    //Will reset the database
-    public void hardReset(){
+    public static List<Game> getSaves() {
+        return DB.getSaves();
+
+    }
+
+
+    void setManualProducer(Producer manualProducer) {
+        this.manualProducer = manualProducer;
     }
 
     public static void main(String[] args) {
-        Game game = new Game();
-        game.start();
+        DB.init();
+        List<Game> games = Game.getSaves();
+        games.forEach(game -> System.out.println(game.getName())
+        );
+        /*ProducerFactory.getAutoProducers().forEach(Producer::insert);
+        Producer man = new Producer();
+        man.setName("Cookie");
+        man.insert();*/
+        //Game game = Game.create("Test");
+        //game.start();
 
     }
 
@@ -120,18 +155,11 @@ public class Game implements Serializable {
     }
 }
 
-
+//helper class
 class ProducerFactory {
 
     static List<Producer> getAutoProducers() {
-        String[] names = {
-                "Grandma",
-                "Bakery",
-                "Factory",
-                "Garbage dump",
-                "",
-                ""
-        };
+
         List<Producer> producers = new ArrayList<>();
 
         producers.add(new Producer(
@@ -141,7 +169,7 @@ class ProducerFactory {
                     1.1,
                     0,
                     true,
-                "Cookie",
+                "Grandma",
                 500
         ));
 
@@ -152,7 +180,7 @@ class ProducerFactory {
                 1.1,
                 0,
                 true,
-                "Grandma",
+                "Bakery",
                 2000));
 
         producers.add(new Producer(
@@ -162,7 +190,7 @@ class ProducerFactory {
                 1.1,
                 0,
                 true,
-                "Bakery",
+                "Farm",
                 10 * 1000));
 
         producers.add(new Producer(

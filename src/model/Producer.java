@@ -51,6 +51,14 @@ public class Producer implements Runnable {
         }
     }
 
+    double getCostBase() {
+        return costBase;
+    }
+
+    void setCostBase(double costBase) {
+        this.costBase = costBase;
+    }
+
     /**
      * @return true if the costBase is less than the amount of currency, false if it is not.
      * Fires PropertyChangeEvents for both level and costBase on success.
@@ -105,6 +113,18 @@ public class Producer implements Runnable {
 
     void setName(String name) {
         this.name = name;
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
+
+    void insert() {
+        DB.insert(this);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
